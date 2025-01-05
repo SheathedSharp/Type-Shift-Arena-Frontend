@@ -1,17 +1,25 @@
 <!--
  * @Author: hiddenSharp429 z404878860@163.com
  * @Date: 2024-10-28 20:13:49
- * @LastEditors: hiddenSharp429 z404878860@163.com
- * @LastEditTime: 2024-11-29 17:01:08
 -->
 <script setup>
 import { store } from "../stores/store";
-import { toRef, onMounted, onBeforeUnmount, ref, reactive, provide, computed, watch } from "vue";
+import {
+  toRef,
+  onMounted,
+  onBeforeUnmount,
+  ref,
+  reactive,
+  provide,
+  computed,
+  watch,
+} from "vue";
 import { useRouter, useRoute } from "vue-router";
 import axios from "axios";
 import { ElNotification } from "element-plus";
-import Friends from "../components/Friends/Friends.vue";
 import { getVisibleNavigators } from "@/config/navigatorAssets";
+import MessageBox from "@/components/common/MessageBox.vue";
+import Friends from "@/components/Friends/Friends.vue";
 
 const router = useRouter();
 const route = useRoute();
@@ -21,20 +29,19 @@ const nickname = toRef(store, "nickname");
 const userInfo = reactive({
   isLoggedIn,
   avatarUrl,
-  nickname
-})
-const isSidebarExpanded = ref(false)
-const showSidebar = ref(false) // 控制侧边栏是否显示
-const currentRoute = computed(() => route.path)
+  nickname,
+});
+const isSidebarExpanded = ref(false);
+const showSidebar = ref(false); // 控制侧边栏是否显示
+const currentRoute = computed(() => route.path);
 const menuItems = computed(() => {
-  const userPermissions = ['user'];
+  const userPermissions = ["user"];
   return getVisibleNavigators(userPermissions);
 });
 
-let isShow=ref(false)
-let tokenCheckInterval;  // 检查token的定时器
+let tokenCheckInterval; // 检查token的定时器
 
-provide('userInfo',userInfo)
+provide("userInfo", userInfo);
 
 // 检查Token有效期
 const checkTokenExpiration = () => {
@@ -56,34 +63,34 @@ const checkTokenExpiration = () => {
       });
     }
   } catch (error) {
-    console.error('Token validation error:', error);
+    console.error("Token validation error:", error);
     logout();
   }
-}
+};
 
 // 退出账号
 const logout = () => {
-  localStorage.removeItem('token')
-  delete axios.defaults.headers.common['Authorization']
-  store.isLoggedIn = false
+  localStorage.removeItem("token");
+  delete axios.defaults.headers.common["Authorization"];
+  store.isLoggedIn = false;
   ElNotification({
-    title: '退出账号',
-    message: '你成功的退出的账号',
-    type: 'success',
+    title: "退出账号",
+    message: "你成功的退出的账号",
+    type: "success",
     duration: 1500,
   });
-  router.push('/auth')
-}
+  router.push("/auth");
+};
 
 // 展开侧边栏
 const expandSidebar = () => {
-  isSidebarExpanded.value = true
-}
+  isSidebarExpanded.value = true;
+};
 
 // 收起侧边栏
 const collapseSidebar = () => {
-  isSidebarExpanded.value = false
-}
+  isSidebarExpanded.value = false;
+};
 
 onMounted(() => {
   // Initial check
@@ -98,20 +105,23 @@ onBeforeUnmount(() => {
   }
 });
 
-
 // 监听登录状态变化
-watch(() => store.isLoggedIn, (newValue) => {
-  if (newValue) {
-    // 登录后，延迟显示侧边栏，配合动画效果
-    setTimeout(() => {
-      showSidebar.value = true
-    }, 100)
-  } else {
-    // 登出时立即隐藏侧边栏
-    showSidebar.value = false
-    isSidebarExpanded.value = false
-  }
-}, { immediate: true })
+watch(
+  () => store.isLoggedIn,
+  (newValue) => {
+    if (newValue) {
+      // 登录后，延迟显示侧边栏，配合动画效果
+      setTimeout(() => {
+        showSidebar.value = true;
+      }, 100);
+    } else {
+      // 登出时立即隐藏侧边栏
+      showSidebar.value = false;
+      isSidebarExpanded.value = false;
+    }
+  },
+  { immediate: true }
+);
 </script>
 
 <template>
@@ -128,19 +138,19 @@ watch(() => store.isLoggedIn, (newValue) => {
           </template>
           <template v-else>
             <div class="user-info">
-                <div class="user-avatar">
-                  <img id="userAvatar" :src="avatarUrl" :alt="nickname" />
-                </div>
-                <span class="user-nickname">{{ nickname }}</span>
+              <div class="user-avatar">
+                <img id="userAvatar" :src="avatarUrl" :alt="nickname" />
               </div>
-
-            <a @click="logout" class="logout-btn">注销</a>
-            <div class="friends" @click="isShow = !isShow">
-              <span>好友列表</span>
-              <right-outlined class="friends-svg" />                         
+              <span class="user-nickname">{{ nickname }}</span>
+              <div class="actions">
+                <MessageBox ref="messageBox" />
+                <Friends ref="friendsBox" />
+                <button class="logout-btn" @click="logout">
+                  <i class="material-icons">logout</i>
+                </button>
+              </div>
             </div>
-            <Friends v-if="isShow" ></Friends>  
-          </template> 
+          </template>
         </div>
       </nav>
     </header>
@@ -149,16 +159,16 @@ watch(() => store.isLoggedIn, (newValue) => {
     <div class="main-container">
       <!-- Collapsible Sidebar -->
       <transition name="sidebar">
-        <div 
+        <div
           v-if="showSidebar"
-          class="sidebar" 
-          :class="{ 'expanded': isSidebarExpanded }"
+          class="sidebar"
+          :class="{ expanded: isSidebarExpanded }"
           @mouseenter="expandSidebar"
           @mouseleave="collapseSidebar"
         >
           <div class="sidebar-content">
-            <router-link 
-              v-for="item in menuItems" 
+            <router-link
+              v-for="item in menuItems"
               :key="item.path"
               :to="item.path"
               class="menu-item"
@@ -181,7 +191,9 @@ watch(() => store.isLoggedIn, (newValue) => {
     <footer class="footer">
       <span class="footer-logo">Type Shift Arena</span>
       <span class="footer-cr">Copyright (c) 2024 Type Shift Arena</span>
-      <a href="https://beian.miit.gov.cn/" target="_blank" class="footer-link">粤ICP备2024219097号-3</a>
+      <a href="https://beian.miit.gov.cn/" target="_blank" class="footer-link"
+        >粤ICP备2024219097号-3</a
+      >
     </footer>
   </div>
 </template>
@@ -219,7 +231,7 @@ nav {
 .logo {
   font-size: 1.8rem;
   font-weight: bold;
-  font-family: 'Russo One', sans-serif;
+  font-family: "Russo One", sans-serif;
   color: transparent;
   background: var(--gradient-primary);
   -webkit-background-clip: text;
@@ -230,7 +242,7 @@ nav {
   letter-spacing: 2px;
   position: relative;
   transition: all 0.3s ease;
-  
+
   &:hover {
     background: var(--gradient-secondary);
     -webkit-background-clip: text;
@@ -255,13 +267,37 @@ nav {
 }
 
 .logout-btn {
-  color: white;
+  background: transparent;
+  border: none;
+  padding: 8px;
+  height: 40px;
+  width: 40px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+  
+  .material-icons {
+    font-size: 24px;
+    color: var(--text-primary);
+    transition: color 0.3s ease;
+  }
+  
+  &:hover {
+    background: var(--accent-dark);
+    
+    .material-icons {
+      color: var(--accent-color);
+    }
+  }
 }
 
 .user-info {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 12px;
 }
 
 .user-avatar {
@@ -274,16 +310,45 @@ nav {
   border-radius: 50%;
   border: 2px solid var(--accent-color);
   box-shadow: var(--shadow-sm);
-  
+
   &:hover {
     border-color: var(--accent-hover);
   }
 }
 
 .user-nickname {
-  color: #fff;
-  font-weight: bold;
+  color: var(--text-primary);
+  font-weight: 500;
+  margin: 0 8px;
 }
+
+.actions {
+  display: flex;
+  align-items: center; /* 确保垂直居中对齐 */
+  gap: 4px; /* 减小间距 */
+  height: 40px; /* 固定高度 */
+
+  &:hover {
+    background: var(--gradient-primary);
+    border-radius: 16px;
+  }
+}
+
+/* 添加深度选择器来统一 MessageBox 和 Friends 组件的触发器样式 */
+:deep(.message-trigger),
+:deep(.friends-trigger) {
+  height: 40px; /* 固定高度 */
+  width: 40px; /* 固定宽度 */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px;
+  
+  .material-icons {
+    font-size: 24px;
+  }
+}
+
 
 /* Sidebar Styles */
 .main-container {
@@ -323,11 +388,11 @@ nav {
   transition: all 0.3s ease;
   margin: 0.5rem;
   border-radius: 8px;
-  
+
   &:hover {
     background-color: var(--accent-dark);
   }
-  
+
   &.active {
     background: var(--gradient-primary);
     box-shadow: var(--shadow-sm);
@@ -384,7 +449,7 @@ nav {
   display: flex;
   flex-direction: column;
   align-items: center;
-  
+
   .footer-logo {
     font-family: "Lobster", cursive;
     color: transparent;
@@ -393,17 +458,17 @@ nav {
     -webkit-background-clip: text;
     background-clip: text;
   }
-  
+
   .footer-cr {
     font-size: 0.5rem;
   }
-  
+
   .footer-link {
     color: var(--text-secondary);
     text-decoration: none;
     font-size: 0.5rem;
     margin-top: 0.1rem;
-    
+
     &:hover {
       color: var(--accent-color);
     }
@@ -416,7 +481,9 @@ nav {
 }
 
 /* 添加毛玻璃效果 */
-.header, .sidebar, .footer {
+.header,
+.sidebar,
+.footer {
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
 }
@@ -425,7 +492,7 @@ nav {
   .material-icons {
     transition: transform 0.3s ease;
   }
-  
+
   &:hover .material-icons {
     transform: scale(1.1);
   }
@@ -452,11 +519,11 @@ nav {
   .content.with-sidebar {
     margin-left: 0;
   }
-  
+
   .sidebar {
     transform: translateX(-100%);
   }
-  
+
   .sidebar.expanded {
     transform: translateX(0);
   }
