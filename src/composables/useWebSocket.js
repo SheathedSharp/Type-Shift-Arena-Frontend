@@ -460,6 +460,53 @@ export function useWebSocket(roomId) {
     subscriptions.value.set(subscriptionKey, subscription)
     return subscription
   }
+
+  // 订阅好友状态
+  const subscribeToFriendStatus = (userId) => {
+    const subscriptionKey = `friend_status_${userId}`
+    
+    // 检查是否已存在订阅
+    if (globalSubscriptions.value.has(subscriptionKey)) {
+      console.log(`[FriendStatus] 复用现有订阅: ${subscriptionKey}`)
+      return globalSubscriptions.value.get(subscriptionKey)
+    }
+
+    // 检查连接状态
+    if (!stompClient.value?.connected) {
+      console.error('[FriendStatus] WebSocket未连接，无法订阅好友状态')
+      return null
+    }
+
+    console.log(`[FriendStatus] 开始订阅好友状态: /user/${userId}/queue/friends/status`)
+    
+    try {
+      const subscription = stompClient.value.subscribe(
+        `/user/${userId}/queue/friends/status`, 
+        (message) => {
+          try {
+            const response = JSON.parse(message.body)
+            console.log('[FriendStatus] 收到好友状态更新:', response)
+            
+            // 使用正确的事件名称
+            window.dispatchEvent(new CustomEvent('friend-status', {
+              detail: response
+            }))
+          } catch (error) {
+            console.error('[FriendStatus] 消息处理错误:', error)
+          }
+        }
+      )
+
+      // 保存订阅
+      globalSubscriptions.value.set(subscriptionKey, subscription)
+      subscriptions.value.set(subscriptionKey, subscription)
+      
+      return subscription
+    } catch (error) {
+      console.error('[FriendStatus] 订阅失败:', error)
+      return null
+    }
+  }
   /*
     好友消息模块函数 END
   */
@@ -484,6 +531,7 @@ export function useWebSocket(roomId) {
     getSubscription,
     hasSubscription,
     setSubscription,
-    subscribeToFriendMessages
+    subscribeToFriendMessages,
+    subscribeToFriendStatus
   }
 }

@@ -12,6 +12,7 @@ export function useFriendMessages() {
     connectWebSocket,
     subscribeToFriendMessages,
     hasSubscription,
+    subscribeToFriendStatus
   } = useWebSocket();
 
   const initializeFriendMessages = async () => {
@@ -30,11 +31,19 @@ export function useFriendMessages() {
         await connectWebSocket();
       }
 
-      // 订阅个人消息通道
+      // 订阅好友消息
       if (!hasSubscription(`/queue/messages/${userId}`)) {
         await subscribeToFriendMessages(userId, (message) => {
           const messageData = JSON.parse(message.body);
           handleFriendMessage(messageData);
+        });
+      }
+
+      // 订阅好友状态
+      if (!hasSubscription(`/user/${userId}/queue/friends/status`)) {
+        await subscribeToFriendStatus(userId, (message) => {
+          const messageData = JSON.parse(message.body);
+          handleFriendStatus(messageData);
         });
       }
     } catch (error) {
@@ -96,6 +105,10 @@ export function useFriendMessages() {
     }
   };
 
+  const handleFriendStatus = (message) => {
+    console.log("[FriendMessages] 收到好友状态:", message);
+  };
+
   onMounted(() => {
     // 只在用户已登录时初始化
     if (localStorage.getItem("token")) {
@@ -109,6 +122,7 @@ export function useFriendMessages() {
 
   return {
     initializeFriendMessages,
-    handleFriendMessage
+    handleFriendMessage,
+    handleFriendStatus
   };
 }

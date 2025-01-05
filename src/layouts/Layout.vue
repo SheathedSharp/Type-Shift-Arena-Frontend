@@ -114,12 +114,14 @@ watch(
   () => store.isLoggedIn,
   (newValue) => {
     if (newValue) {
+      // 监听好友消息
       window.addEventListener("friend-messages", (event) => {
         if (event.detail.data.status === "UNREAD") {
           messageBoxRef.value?.addMessage(event.detail.data);
         }
         handleFriendMessage(event.detail);
       });
+
       // 登录后，延迟显示侧边栏，配合动画效果
       setTimeout(() => {
         showSidebar.value = true;

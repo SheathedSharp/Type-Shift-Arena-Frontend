@@ -145,12 +145,25 @@ const handleFriendClick = (friend) => {
   // 这里可以添加点击好友后的操作，比如打开聊天窗口等
 }
 
+const updateFriendStatus = (event) => {
+  const { userId, online } = event.data;
+  const friendIndex = friendsList.value.findIndex(friend => friend.id === userId);
+  
+  if (friendIndex !== -1) {
+    friendsList.value[friendIndex] = {
+      ...friendsList.value[friendIndex],
+      online: online
+    };
+  }
+};
+
 onMounted(() => {
   getFriendsList()
+  // 监听好友状态
+  window.addEventListener("friend-status", (event) => {
+    updateFriendStatus(event.detail);
+  });
 })
-
-// 提供给子组件使用
-// provide('getFriendsList', getFriendsList)
 </script>
 
 <style lang="scss" scoped>
@@ -187,14 +200,13 @@ onMounted(() => {
 
 .online-count {
   position: absolute;
-  top: 0;
-  right: 0;
+  top: 3px;
+  right: 6px;
   background: var(--accent-color);
   color: white;
-  border-radius: 10px;
-  padding: 2px 6px;
-  font-size: 12px;
-  min-width: 18px;
+  border-radius: 5px;
+  font-size: 8px;
+  min-width: 14px;
   text-align: center;
 }
 
