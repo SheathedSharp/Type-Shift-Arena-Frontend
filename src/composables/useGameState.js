@@ -1,8 +1,6 @@
 /*
  * @Author: hiddenSharp429 z404878860@163.com
  * @Date: 2024-11-14 19:40:25
- * @LastEditors: Please set LastEditors
- * @LastEditTime: 2024-12-30 22:29:05
  */
 import { ElNotification } from 'element-plus'
 import { ref, computed, onMounted, onUnmounted } from 'vue'
@@ -38,18 +36,6 @@ export function useGameState(roomId, stompClient) {
 
   // 处理玩家离开
   const handlePlayerLeave = (data) => {
-    // const leftPlayerId = String(data.playerId)
-    // // 从玩家列表中移除离开的玩家
-    // players.value = players.value.filter(id => id !== leftPlayerId)
-    // // 如果对手离开，重置对手信息
-    // if (opponentInfo.value?.id === leftPlayerId) {
-    //   opponentInfo.value = null
-    // }
-    // // 如果房间变空，重置游戏状态
-    // if (players.value.length < 2) {
-    //   gameStatus.value = 'waiting'
-    // }
-
     // 更新玩家信息
     playerStats.updatePlayerInfo(data)
   }
