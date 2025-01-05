@@ -100,11 +100,12 @@ const toggleExpand = () => {
 const getFriendsList = async () => {
   try {
     const res = await getFriends(userId)
-    if (res.success) {
+    console.log(res)
+    if (res.status === 200) {
       friendsList.value = res.data.map(friend => ({
         id: friend.id,
         name: friend.username,
-        imgUrl: friend.avatarUrl,
+        imgUrl: friend.imgSrc,
         online: friend.online // 如果后端提供在线状态
       }))
     } else {

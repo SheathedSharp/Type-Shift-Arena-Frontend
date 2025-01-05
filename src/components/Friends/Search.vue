@@ -66,7 +66,6 @@ import { SearchOutlined, InboxOutlined } from "@ant-design/icons-vue";
 const searchList = ref([]); // 搜索结果列表
 const fname = ref(""); // 搜索框输入的值
 const userId = localStorage.getItem("userId"); // 当前用户id
-const getFriendsList = inject("getFriendsList"); // 获取好友列表
 const hasSearched = ref(false);
 const sendingRequests = ref({});
 
@@ -97,15 +96,12 @@ const handleAdd = async (friendId) => {
   sendingRequests.value[friendId] = true;
   try {
     const res = await sendFriendRequest(userId, friendId);
-    if (res.success) {
-      ElMessage.success(res.message || "好友请求已发送");
-      getFriendsList(userId);
-    } else {
-      ElMessage.error(res.message || "发送好友请求失败");
+    if (res.status == 200) {
+      ElMessage.success("好友请求已发送");
     }
   } catch (error) {
     console.error("发送好友请求错误:", error);
-    ElMessage.error("发送好友请求失败");
+    ElMessage.error(error.response.data.message);
   } finally {
     sendingRequests.value[friendId] = false;
   }

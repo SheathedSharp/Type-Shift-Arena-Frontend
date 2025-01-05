@@ -1,3 +1,7 @@
+/*
+ * @Author: hiddenSharp429 z404878860@163.com
+ * @Date: 2025-01-04 16:34:08
+ */
 import axios from '@/plugins/axios'
 
 // 获取好友列表
@@ -25,6 +29,17 @@ export const sendFriendRequest = async (senderId, receiverId) => {
       receiverId
     }
   })
+  return response.data
+}
+
+// 处理好友请求
+export const handleFriendRequest = async (message, status) => {
+  const response = await axios.post(`/friends/request/${message.id}`, null, {
+    params: {
+      status
+    }
+  })
+  console.log(response.data)
   return response.data
 }
 

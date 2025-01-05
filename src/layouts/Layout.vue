@@ -20,6 +20,8 @@ import { ElNotification } from "element-plus";
 import { getVisibleNavigators } from "@/config/navigatorAssets";
 import MessageBox from "@/components/common/MessageBox.vue";
 import Friends from "@/components/Friends/Friends.vue";
+import { useFriendMessages } from "@/composables/useFriendMessages";
+
 
 const router = useRouter();
 const route = useRoute();
@@ -38,6 +40,8 @@ const menuItems = computed(() => {
   const userPermissions = ["user"];
   return getVisibleNavigators(userPermissions);
 });
+const { handleFriendMessage } = useFriendMessages();
+const messageBoxRef = ref(null);
 
 let tokenCheckInterval; // 检查token的定时器
 
@@ -110,6 +114,12 @@ watch(
   () => store.isLoggedIn,
   (newValue) => {
     if (newValue) {
+      window.addEventListener("friend-messages", (event) => {
+        if (event.detail.data.status === "UNREAD") {
+          messageBoxRef.value?.addMessage(event.detail.data);
+        }
+        handleFriendMessage(event.detail);
+      });
       // 登录后，延迟显示侧边栏，配合动画效果
       setTimeout(() => {
         showSidebar.value = true;
@@ -118,6 +128,8 @@ watch(
       // 登出时立即隐藏侧边栏
       showSidebar.value = false;
       isSidebarExpanded.value = false;
+      // 清空消息
+      messageBoxRef.value?.clearMessages();
     }
   },
   { immediate: true }
@@ -143,7 +155,7 @@ watch(
               </div>
               <span class="user-nickname">{{ nickname }}</span>
               <div class="actions">
-                <MessageBox ref="messageBox" />
+                <MessageBox ref="messageBoxRef" />
                 <Friends ref="friendsBox" />
                 <button class="logout-btn" @click="logout">
                   <i class="material-icons">logout</i>
@@ -278,16 +290,16 @@ nav {
   justify-content: center;
   border-radius: 8px;
   transition: all 0.3s ease;
-  
+
   .material-icons {
     font-size: 24px;
     color: var(--text-primary);
     transition: color 0.3s ease;
   }
-  
+
   &:hover {
     background: var(--accent-dark);
-    
+
     .material-icons {
       color: var(--accent-color);
     }
@@ -343,12 +355,11 @@ nav {
   align-items: center;
   justify-content: center;
   padding: 8px;
-  
+
   .material-icons {
     font-size: 24px;
   }
 }
-
 
 /* Sidebar Styles */
 .main-container {
