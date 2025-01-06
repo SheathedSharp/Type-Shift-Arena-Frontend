@@ -46,7 +46,12 @@
             </div>
             
             <div class="actions" @click.stop>
-              <button class="action-btn invite" @click="invToGame(friend.id)" title="邀请游戏">
+              <button 
+                class="action-btn invite" 
+                @click="invToGame(friend.id)" 
+                :disabled="!friend.online"
+                :title="friend.online ? '邀请游戏' : '好友离线'"
+              >
                 <i class="material-icons">sports_esports</i>
               </button>
               <button class="action-btn remove" @click="removeFriendHandler(friend.id)" title="删除好友">
@@ -72,9 +77,9 @@
 </template>
 
 <script setup>
-import { inject, ref, computed, onMounted } from "vue";
+import { inject, ref, computed, onMounted, onUnmounted } from "vue";
 import Search from "./Search.vue";
-import { getFriends, removeFriend } from "@/api/modules/friends/friends";
+import { getFriends, removeFriend, getOnlineFriends } from "@/api/modules/friends/friends";
 import { ElMessage } from 'element-plus';
 
 const isExpanded = ref(false)
@@ -114,6 +119,26 @@ const getFriendsList = async () => {
   } catch (error) {
     console.error('获取好友列表错误:', error)
     ElMessage.error('获取好友列表失败')
+  }
+}
+
+const getOnlineFriendsList = async () => {
+  try {
+    const res = await getOnlineFriends(userId)
+    console.log("在线好友列表", res)
+    if (res.status === 200) {
+      // 更新在线好友状态
+      const onlineFriendIds = res.data.map(friend => friend.id)
+      friendsList.value = friendsList.value.map(friend => ({
+        ...friend,
+        online: onlineFriendIds.includes(friend.id)
+      }))
+    } else {
+      ElMessage.error(res.message || '获取在线好友列表失败')
+    }
+  } catch (error) {
+    console.error('获取在线好友列表错误:', error)
+    ElMessage.error('获取在线好友列表失败')
   }
 }
 
@@ -159,10 +184,20 @@ const updateFriendStatus = (event) => {
 
 onMounted(() => {
   getFriendsList()
+  getOnlineFriendsList()
+  
+  // 定期更新在线状态（可选）
+  const statusInterval = setInterval(getOnlineFriendsList, 30000) // 每30秒更新一次
+  
   // 监听好友状态
   window.addEventListener("friend-status", (event) => {
-    updateFriendStatus(event.detail);
-  });
+    updateFriendStatus(event.detail)
+  })
+  
+  // 组件卸载时清理定时器
+  onUnmounted(() => {
+    clearInterval(statusInterval)
+  })
 })
 </script>
 
@@ -344,11 +379,19 @@ onMounted(() => {
   cursor: pointer;
   transition: all 0.3s ease;
 
+  &:disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
+    background: rgba(75, 75, 75, 0.2) !important;
+    color: #666 !important;
+    transform: none !important;
+  }
+
   &.invite {
     background: rgba(79, 70, 229, 0.2);
     color: var(--accent-color);
 
-    &:hover {
+    &:hover:not(:disabled) {
       background: rgba(79, 70, 229, 0.3);
       transform: translateY(-2px);
     }
