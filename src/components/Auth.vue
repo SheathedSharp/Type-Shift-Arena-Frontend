@@ -5,6 +5,7 @@ import { API_BASE_URL } from '@/config'
 import axios from 'axios'
 import { store } from '../stores/store'
 import { ElNotification } from 'element-plus';
+import { useFriendMessages } from '@/composables/useFriendMessages'
 
 const router = useRouter()
 const isRightPanelActive = ref(false)
@@ -52,6 +53,11 @@ const doSignIn = async () => {
       localStorage.setItem('imgSrc', data.imgSrc)
       axios.defaults.headers.common['Authorization'] = `Bearer ${data.token}`
       store.isLoggedIn = true
+      
+      // 初始化 WebSocket 连接
+      const { initializeFriendMessages } = useFriendMessages()
+      await initializeFriendMessages()
+      
       ElNotification({
         title: '登录成功',
         message: '您已成功登录',

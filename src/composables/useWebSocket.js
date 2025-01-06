@@ -23,61 +23,71 @@ export function useWebSocket(roomId) {
   */
   // 连接 WebSocket
   const connectWebSocket = async () => {
-    // 如果已经有全局连接，直接使用
-    if (globalStompClient.value?.connected) {
-      console.log('[WebSocket] 复用现有连接')
-      stompClient.value = globalStompClient.value
-      return globalStompClient.value
-    }
-
-    // 否则建立新连接
-    console.log('[WebSocket] 建立新连接')
-    return new Promise((resolve, reject) => {
-      try {
-        const playerId = localStorage.getItem('userId')
-        if (!playerId) {
-          reject(new Error('无法获取用户ID'))
-          return
-        }
-
-        connectionStatus.value = '正在连接...'
-        
-        const ws = new WebSocket(WS_URL)
-        
-        setupWebSocketHandlers(ws)
-        
-        // 修改 setupStompClient 来处理连接成功
-        const client = new Client({
-          webSocketFactory: () => ws,
-          debug: function (str) {
-            console.log('[STOMP Debug]:', str)
-          },
-          reconnectDelay: 5000,
-          heartbeatIncoming: 4000,
-          heartbeatOutgoing: 4000
-        })
-
-        client.onConnect = () => {
-          console.log('[STOMP] 连接成功')
-          connectionStatus.value = '已连接'
-          stompClient.value = client
-          globalStompClient.value = client  // 保存到全局
-          resolve(client)
-        }
-
-        client.onStompError = (frame) => {
-          console.error('[STOMP] 错误:', frame)
-          connectionStatus.value = '连接错误'
-          reject(new Error('STOMP 连接错误'))
-        }
-
-        client.activate()
-      } catch (error) {
-        console.error('[连接错误]:', error)
-        connectionStatus.value = '连接失败'
-        reject(error)
+    try {
+      const token = localStorage.getItem('token')
+      const userId = localStorage.getItem('userId')
+      
+      // 验证用户是否已登录
+      if (!token || !userId) {
+        console.log('[WebSocket] 用户未登录，取消连接')
+        return Promise.reject(new Error('未登录'))
       }
-    })
+
+      // 如果已经有全局连接，直接使用
+      if (globalStompClient.value?.connected) {
+        console.log('[WebSocket] 复用现有连接')
+        stompClient.value = globalStompClient.value
+        return globalStompClient.value
+      }
+
+      // 否则建立新连接
+      console.log('[WebSocket] 建立新连接')
+      return new Promise((resolve, reject) => {
+        try {
+          connectionStatus.value = '正在连接...'
+          
+          const ws = new WebSocket(`${WS_URL}?token=${token}`)
+          
+          setupWebSocketHandlers(ws)
+          
+          const client = new Client({
+            webSocketFactory: () => ws,
+            debug: function (str) {
+              console.log('[STOMP Debug]:', str)
+            },
+            reconnectDelay: 5000,
+            heartbeatIncoming: 4000,
+            heartbeatOutgoing: 4000,
+            connectHeaders: {
+              token: token
+            }
+          })
+
+          client.onConnect = () => {
+            console.log('[STOMP] 连接成功')
+            connectionStatus.value = '已连接'
+            stompClient.value = client
+            globalStompClient.value = client  // 保存到全局
+            resolve(client)
+          }
+
+          client.onStompError = (frame) => {
+            console.error('[STOMP] 错误:', frame)
+            connectionStatus.value = '连接错误'
+            reject(new Error('STOMP 连接错误'))
+          }
+
+          client.activate()
+        } catch (error) {
+          console.error('[连接错误]:', error)
+          connectionStatus.value = '连接失败'
+          reject(error)
+        }
+      })
+    } catch (error) {
+      console.error('[WebSocket] 连接初始化失败:', error)
+      return Promise.reject(error)
+    }
   }
 
   // 设置 WebSocket 处理器
@@ -369,16 +379,6 @@ export function useWebSocket(roomId) {
       const message = JSON.parse(response.body)
       console.log('[PlayerChannel] 收到房间信息:', message)
 
-      // // 处理房间创建消息
-      // if (message.type == 'ROOM_CREATED') {
-      //   console.log('[PlayerChannel] 处理房间创建消息')
-      //   const roomId = message.roomId
-      //   gameState = useGameState(roomId, stompClient)
-      //   gameState.gameStatus.value = 'waiting'
-      //   console.log('[PlayerChannel] 房间创建成功:', roomId)
-      //   console.log('[PlayerChannel] 游戏状态:', gameState.gameStatus.value)
-      // }
-
       // 所有消息都通过 player-channel 事件转发给 useGameState 处理
       window.dispatchEvent(new CustomEvent('player-channel', {
         detail: message
@@ -424,6 +424,93 @@ export function useWebSocket(roomId) {
     订阅管理模块函数 END
   */
 
+
+
+  /*
+    好友消息模块函数 START
+    @Author: hiddenSharp429(zixian zhu)
+  */
+ 
+  // 订阅好友消息通道
+  const subscribeToFriendMessages = (userId, callback) => {
+    const subscriptionKey = `/queue/messages/${userId}`
+    
+    if (globalSubscriptions.value.has(subscriptionKey)) {
+      console.log(`[FriendMessages] 复用现有订阅: ${subscriptionKey}`)
+      return globalSubscriptions.value.get(subscriptionKey)
+    }
+    
+    if (!stompClient.value?.connected) {
+      console.error('WebSocket未连接，无法订阅好友消息')
+      return
+    }
+
+    console.log(`[FriendMessages] 开始订阅好友消息: ${subscriptionKey}`)
+    
+    const subscription = stompClient.value.subscribe(subscriptionKey, (response) => {
+      const message = JSON.parse(response.body)
+
+      // 所有消息都通过 friend-messages 事件转发给 useFriendMessages 处理
+      window.dispatchEvent(new CustomEvent('friend-messages', {
+        detail: message
+      }))
+    })
+
+    globalSubscriptions.value.set(subscriptionKey, subscription)
+    subscriptions.value.set(subscriptionKey, subscription)
+    return subscription
+  }
+
+  // 订阅好友状态
+  const subscribeToFriendStatus = (userId) => {
+    const subscriptionKey = `friend_status_${userId}`
+    
+    // 检查是否已存在订阅
+    if (globalSubscriptions.value.has(subscriptionKey)) {
+      console.log(`[FriendStatus] 复用现有订阅: ${subscriptionKey}`)
+      return globalSubscriptions.value.get(subscriptionKey)
+    }
+
+    // 检查连接状态
+    if (!stompClient.value?.connected) {
+      console.error('[FriendStatus] WebSocket未连接，无法订阅好友状态')
+      return null
+    }
+
+    console.log(`[FriendStatus] 开始订阅好友状态: /user/${userId}/queue/friends/status`)
+    
+    try {
+      const subscription = stompClient.value.subscribe(
+        `/user/${userId}/queue/friends/status`, 
+        (message) => {
+          try {
+            const response = JSON.parse(message.body)
+            console.log('[FriendStatus] 收到好友状态更新:', response)
+            
+            // 使用正确的事件名称
+            window.dispatchEvent(new CustomEvent('friend-status', {
+              detail: response
+            }))
+          } catch (error) {
+            console.error('[FriendStatus] 消息处理错误:', error)
+          }
+        }
+      )
+
+      // 保存订阅
+      globalSubscriptions.value.set(subscriptionKey, subscription)
+      subscriptions.value.set(subscriptionKey, subscription)
+      
+      return subscription
+    } catch (error) {
+      console.error('[FriendStatus] 订阅失败:', error)
+      return null
+    }
+  }
+  /*
+    好友消息模块函数 END
+  */
+
   return {
     stompClient,
     connectionStatus,
@@ -443,6 +530,8 @@ export function useWebSocket(roomId) {
     subscribeToPlayerChannel,
     getSubscription,
     hasSubscription,
-    setSubscription
+    setSubscription,
+    subscribeToFriendMessages,
+    subscribeToFriendStatus
   }
 }

@@ -271,6 +271,9 @@ const handleCreateRoom = async (config) => {
 
     if (response.data.status === 200) {
       const roomId = response.data.data.roomId
+
+      // 保存房间信息
+      localStorage.setItem('roomId', roomId)
       
       // 4. 订阅房间广播频道
       if (!hasSubscription(`room_${roomId}`)) {
