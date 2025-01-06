@@ -116,7 +116,7 @@ watch(
     if (newValue) {
       // 监听好友消息
       window.addEventListener("friend-messages", (event) => {
-        if (event.detail.data.status === "UNREAD") {
+        if (event.detail?.data?.status === "UNREAD") {
           messageBoxRef.value?.addMessage(event.detail.data);
         }
         handleFriendMessage(event.detail);

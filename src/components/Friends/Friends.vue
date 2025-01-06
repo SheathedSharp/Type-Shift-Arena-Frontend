@@ -81,12 +81,15 @@ import { inject, ref, computed, onMounted, onUnmounted } from "vue";
 import Search from "./Search.vue";
 import { getFriends, removeFriend, getOnlineFriends } from "@/api/modules/friends/friends";
 import { ElMessage } from 'element-plus';
+import { useWebSocket } from '@/composables/useWebSocket';
+
 
 const isExpanded = ref(false)
 const isSearch = ref(false)
 const friendsList = ref([])
 const userId = localStorage.getItem('userId')
 const userInfo = inject('userInfo')
+const { connectWebSocket, stompClient } = useWebSocket();
 
 // 计算在线好友数量
 const onlineCount = computed(() => {
@@ -160,8 +163,31 @@ const removeFriendHandler = async (friendId) => {
 
 // 邀请好友进入游戏
 const invToGame = (friendId) => {
-  // TODO: 实现邀请好友进入游戏的逻辑
-  console.log('邀请好友:', friendId)
+  if (!stompClient.value?.connected) {
+    ElMessage.error('网络连接异常，请刷新页面重试')
+    return
+  }
+
+  // 获取缓存信息
+  const playerId = localStorage.getItem('userId')
+  const roomId = localStorage.getItem('roomId')
+
+  if (!roomId) {
+    ElMessage.error('房间ID不存在，请先创建房间')
+    return
+  }
+
+  // 发送游戏邀请
+  stompClient.value.publish({
+    destination: '/app/game/invite',
+    body: JSON.stringify({
+      playerId: playerId,
+      roomId: roomId,
+      opponentId: friendId
+    })
+  })
+
+  ElMessage.success('游戏邀请已发送')
 }
 
 // 添加好友点击处理函数
@@ -183,6 +209,14 @@ const updateFriendStatus = (event) => {
 };
 
 onMounted(() => {
+  if (!stompClient.value?.connected) {
+    try {
+      connectWebSocket();
+    } catch (error) {
+      console.error('WebSocket connection failed:', error);
+      ElMessage.error('网络连接失败，请刷新页面重试');
+    }
+  }
   getFriendsList()
   getOnlineFriendsList()
   

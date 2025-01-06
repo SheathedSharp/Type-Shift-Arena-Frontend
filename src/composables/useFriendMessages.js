@@ -91,12 +91,9 @@ export function useFriendMessages() {
         break;
 
       case "GAME_INVITE":
-        ElMessage({
-          message: `${message.data.senderName} 邀请您加入游戏`,
-          type: "info",
-          duration: 5000,
-          showClose: true,
-        });
+        window.dispatchEvent(new CustomEvent('game-invite', {
+          detail: message
+        }));
         break;
 
       default:
@@ -122,7 +119,6 @@ export function useFriendMessages() {
 
   return {
     initializeFriendMessages,
-    handleFriendMessage,
-    handleFriendStatus
+    handleFriendMessage
   };
 }

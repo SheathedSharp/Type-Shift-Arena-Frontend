@@ -5,10 +5,51 @@
 <template>
   <router-view />
   <GlobalAnimationLayer />
+  <GameInviteDialog
+    v-if="showGameInvite"
+    :visible="showGameInvite"
+    :invitation="currentInvitation"
+    @close="handleCloseInvite"
+    @accept="handleAcceptInvite"
+    @reject="handleRejectInvite"
+  />
 </template>
 
 <script setup>
 import GlobalAnimationLayer from '@/components/common/GlobalAnimationLayer.vue'
+import GameInviteDialog from '@/components/GameRoom/GameInviteDialog.vue'
+import { ref, onMounted, onUnmounted } from 'vue';
+
+const showGameInvite = ref(false);
+const currentInvitation = ref(null);
+
+const handleGameInvite = (event) => {
+  currentInvitation.value = event.detail;
+  showGameInvite.value = true;
+};
+
+const handleCloseInvite = () => {
+  showGameInvite.value = false;
+  currentInvitation.value = null;
+};
+
+const handleAcceptInvite = () => {
+  showGameInvite.value = false;
+  // Additional logic for accepting invite can be added here
+};
+
+const handleRejectInvite = () => {
+  showGameInvite.value = false;
+  // Additional logic for rejecting invite can be added here
+};
+
+onMounted(() => {
+  window.addEventListener('game-invite', handleGameInvite);
+});
+
+onUnmounted(() => {
+  window.removeEventListener('game-invite', handleGameInvite);
+});
 </script>
 
 <style>
