@@ -19,7 +19,7 @@ export function useWebSocket(roomId) {
 
   /* 
     WebSocket模块函数
-    @Author: hiddenSharp429(zixian zhu)
+    @Author: SheathedSharp(zixian zhu)
   */
   // 连接 WebSocket
   const connectWebSocket = async () => {
@@ -219,7 +219,7 @@ export function useWebSocket(roomId) {
 
   /*
     匹配模块函数 START
-    @Author: hiddenSharp429(zixian zhu)
+    @Author: SheathedSharp(zixian zhu)
   */
   // 发起匹配请求
   const sendMatchRequest = (matchData) => {
@@ -327,7 +327,7 @@ export function useWebSocket(roomId) {
 
   /*
     房间模块函数 START
-    @Author: hiddenSharp429(zixian zhu)
+    @Author: SheathedSharp(zixian zhu)
   */
   // 订阅房间广播消息 (公共消息通道)
   const subscribeToRoomBroadcast = (roomId) => {
@@ -406,7 +406,7 @@ export function useWebSocket(roomId) {
 
   /*
     订阅管理模块函数 START
-    @Author: hiddenSharp429(zixian zhu)
+    @Author: SheathedSharp(zixian zhu)
   */
   // 获取订阅
   const getSubscription = (key) => {
@@ -428,7 +428,7 @@ export function useWebSocket(roomId) {
 
   /*
     好友消息模块函数 START
-    @Author: hiddenSharp429(zixian zhu)
+    @Author: SheathedSharp(zixian zhu)
   */
  
   // 订阅好友消息通道

@@ -1,7 +1,7 @@
 /*
- * @Author: hiddenSharp429 z404878860@163.com
+ * @Author: SheathedSharp z404878860@163.com
  * @Date: 2024-10-28 20:58:42
- * @LastEditors: hiddenSharp429 z404878860@163.com
+ * @LastEditors: SheathedSharp z404878860@163.com
  * @LastEditTime: 2024-11-29 17:42:30
  */
 export const API_BASE_URL = import.meta.env.VITE_API_BASE_URL
