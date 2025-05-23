@@ -6,6 +6,7 @@ import axios from 'axios'
 import { store } from '../stores/store'
 import { ElNotification } from 'element-plus';
 import { useFriendMessages } from '@/composables/useFriendMessages'
+import IconSvg from '@/assets/icons/IconSvg.vue'
 
 const router = useRouter()
 const isRightPanelActive = ref(false)
@@ -145,28 +146,28 @@ const doSignUp = async () => {
           <span>请填写下面的信息开始游戏吧 &#128512;</span>
           
           <label class="form-input">
-            <i class="material-icons">person</i>
+            <IconSvg name="person" />
             <input type="text" required v-model="signup.username" />
             <span class="label">用户名</span>
             <span class="underline"></span>
           </label>
 
           <label class="form-input">
-            <i class="material-icons">email</i>
+            <IconSvg name="mail" />
             <input type="email" required v-model="signup.email" />
             <span class="label">邮箱</span>
             <span class="underline"></span>
           </label>
 
           <label class="form-input">
-            <i class="material-icons">lock</i>
+            <IconSvg name="lock" />
             <input type="password" required v-model="signup.password" />
             <span class="label">密码</span>
             <div class="underline"></div>
           </label>
 
           <label class="form-input">
-            <i class="material-icons">lock</i>
+            <IconSvg name="lock" />
             <input type="password" required v-model="signup.password_confirm" />
             <span class="label">确认密码</span>
             <div class="underline"></div>
@@ -182,14 +183,14 @@ const doSignUp = async () => {
           <span>请输入您的账号密码 &#128516;</span>
 
           <label class="form-input">
-            <i class="material-icons">person</i>
+            <IconSvg name="person" />
             <input type="text" required v-model="signin.username" />
             <span class="label">用户名</span>
             <span class="underline"></span>
           </label>
 
           <label class="form-input">
-            <i class="material-icons">lock</i>
+            <IconSvg name="lock" />
             <input type="password" required v-model="signin.password" />
             <span class="label">密码</span>
             <div class="underline"></div>
@@ -220,7 +221,6 @@ const doSignUp = async () => {
 
 <style scoped>
 @import url('https://fonts.googleapis.com/css?family=Montserrat:400,800');
-@import url('https://fonts.googleapis.com/icon?family=Material+Icons');
 
 * {
   box-sizing: border-box;
@@ -319,7 +319,7 @@ p, span {
   box-shadow: 0 0 0 2px var(--accent-color);
 }
 
-.form-input .material-icons {
+.form-input svg {
   position: absolute;
   left: 12px;
   top: 50%;

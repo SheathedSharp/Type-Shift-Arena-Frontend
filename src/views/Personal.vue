@@ -6,6 +6,7 @@ import { API_BASE_URL, IMG_BB_API_KEY } from '@/config'
 import {store} from "../stores/store.js";
 import { ElNotification } from 'element-plus';
 import MatchHistoryCard from '@/components/MatchHistoryCard.vue';
+import IconSvg from '@/assets/icons/IconSvg.vue';
 
 const userId = localStorage.getItem('userId');
 const fileInput = ref(null); // 添加文件输入引用
@@ -362,29 +363,29 @@ onMounted(() => {
           <!-- 用户信息展示 -->
           <div class="modifymore">
             <span>用户名：{{ userInfo.username }}</span>
-            <i class="material-icons">person</i>
+            <IconSvg name="person" />
           </div>
           <div class="modifymore">
             <span>账号ID：{{ userId }}</span>
-            <i class="material-icons">badge</i>
+            <IconSvg name="badge" />
           </div>
           <div class="modifymore">
             <span>邮箱：{{ userInfo.email }}</span>
-            <i class="material-icons">email</i>
+            <IconSvg name="email" />
           </div>
           <div class="modifymore">
             <span>密码</span>
-            <i class="material-icons">lock</i>
+            <IconSvg name="lock" />
           </div>
 
           <!-- 按钮组 -->
           <div class="button-group">
             <button @click="editUserInfo('info')" class="action-button changeInfo">
-              <i class="material-icons">edit</i>
+              <IconSvg name="edit" />
               修改信息
             </button>
             <button @click="editUserInfo('password')" class="action-button changePsw">
-              <i class="material-icons">key</i>
+              <IconSvg name="key" />
               修改密码
             </button>
           </div>

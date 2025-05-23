@@ -5,7 +5,7 @@
       <div class="dialog-header">
         <h3>游戏邀请</h3>
         <button class="close-btn" @click="handleClose">
-          <i class="material-icons">close</i>
+          <IconSvg name="close" />
         </button>
       </div>
 
@@ -24,15 +24,15 @@
 
         <div class="game-details">
           <div class="detail-item">
-            <i class="material-icons">translate</i>
+            <IconSvg name="translate" />
             <span>{{ getLanguageLabel(invitation.data.language) }}</span>
           </div>
           <div class="detail-item">
-            <i class="material-icons">category</i>
+            <IconSvg name="category" />
             <span>{{ getCategoryLabel(invitation.data.category) }}</span>
           </div>
           <div class="detail-item">
-            <i class="material-icons">signal_cellular_alt</i>
+            <IconSvg name="signal_cellular_alt" />
             <span>{{ getDifficultyLabel(invitation.data.difficulty) }}</span>
           </div>
         </div>
@@ -60,6 +60,7 @@ import { useWebSocket } from "@/composables/useWebSocket";
 import { useGameState } from "@/composables/useGameState";
 import { getLanguageLabel, getCategoryLabel, getDifficultyLabel } from '@/utils/labelUtils';
 import { ElMessage } from 'element-plus';
+import IconSvg from '@/assets/icons/IconSvg.vue';
 
 const router = useRouter();
 const { stompClient, connectWebSocket, subscribeToPlayerChannel, subscribeToRoomBroadcast, hasSubscription } = useWebSocket();

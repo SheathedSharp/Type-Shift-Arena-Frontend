@@ -8,6 +8,7 @@ import DebugPanel from '@/components/GameRoom/DebugPanel.vue'
 import StatusBar from '@/components/GameRoom/StatusBar.vue'
 import GameArea from '@/components/GameRoom/GameArea.vue'
 import GameResultDialog from '@/components/GameRoom/GameResultDialog.vue'
+import IconSvg from '@/assets/icons/IconSvg.vue';
 
 const route = useRoute()
 const router = useRouter()
@@ -296,11 +297,11 @@ const handleGameResult = (result) => {
         </div>
         <div class="room-controls">
           <button class="control-btn copy-btn" @click="copyRoomUrl">
-            <span class="material-icons">content_copy</span>
+            <IconSvg name="content_copy" />
             复制房间链接
           </button>
           <button class="control-btn leave-btn" @click="handleLeaveRoom">
-            <span class="material-icons">exit_to_app</span>
+            <IconSvg name="exit_to_app" />
             离开房间
           </button>
         </div>
@@ -470,7 +471,7 @@ const handleGameResult = (result) => {
   background: #dc2626;
 }
 
-.material-icons {
+svg {
   font-size: 1.2rem;
 }
 

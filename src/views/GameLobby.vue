@@ -57,7 +57,7 @@
                 <div class="filter-header">
                   <h3 class="filter-title">难度</h3>
                   <button class="clear-filters-btn" @click="clearFilters">
-                    <i class="material-icons">clear</i>
+                    <IconSvg name="clear" />
                     清除筛选
                   </button>
                 </div>
@@ -212,6 +212,7 @@ import { fetchCategoriesByLanguage, convertToGameOptions as convertCategoryOptio
 import { fetchDifficultiesByLanguageAndCategory, convertToGameOptions as convertDifficultyOptions } from '@/api/modules/game/gameDifficulties'
 import { useWebSocket } from '@/composables/useWebSocket'
 import { useGameState } from '@/composables/useGameState'
+import IconSvg from '@/assets/icons/IconSvg.vue';
 const router = useRouter()
 const rooms = ref([])
 const totalRooms = ref(0)

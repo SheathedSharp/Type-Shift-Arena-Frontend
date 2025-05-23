@@ -6,6 +6,7 @@ import CustomSelect from '../components/CustomSelect.vue'
 import { SOUND_ASSETS } from '@/config/soundAssets'
 import { LANGUAGE_ASSETS } from '@/config/languageAssets'
 import { setLocale } from '@/i18n'
+import IconSvg from '@/assets/icons/IconSvg.vue'
 
 const { locale, t } = useI18n()
 
@@ -99,7 +100,7 @@ const previewBurstSound = () => {
           <h3>{{ t('settings.language.title') }}</h3>
           <div class="setting-item">
             <label class="setting-label">
-              <span class="material-icons">language</span>
+              <IconSvg name="language" />
               {{ t('settings.language.interfaceLanguage') }}
             </label>
             <div class="setting-controls">
@@ -117,7 +118,7 @@ const previewBurstSound = () => {
           <h3>{{ t('settings.sound.typingSound') }}</h3>
           <div class="setting-item">
             <label class="setting-label">
-              <span class="material-icons">keyboard</span>
+              <IconSvg name="keyboard" />
               {{ t('settings.sound.enable') }}
             </label>
             <div class="setting-controls">
@@ -144,7 +145,7 @@ const previewBurstSound = () => {
                 @click="previewTypingSound"
                 :disabled="!soundManager.isEnabled()"
               >
-                <span class="material-icons">play_circle</span>
+                <IconSvg name="play_circle" />
                 {{ t('settings.sound.preview') }}
               </button>
             </div>
@@ -170,7 +171,7 @@ const previewBurstSound = () => {
           <!-- 聚焦音效设置 -->
           <div class="setting-item">
             <label class="setting-label">
-              <span class="material-icons">center_focus_strong</span>
+              <IconSvg name="center_focus_strong" />
               {{ t('settings.sound.scopeHoverSound') }}
             </label>
             <div class="setting-controls">
@@ -197,7 +198,7 @@ const previewBurstSound = () => {
                 @click="previewScopeHoverSound"
                 :disabled="!scopeHoverSound.enabled"
               >
-                <span class="material-icons">play_circle</span>
+                <IconSvg name="play_circle" />
                 {{ t('settings.sound.preview') }}
               </button>
             </div>
@@ -206,7 +207,7 @@ const previewBurstSound = () => {
           <!-- 点击音效设置 -->
           <div class="setting-item">
             <label class="setting-label">
-              <span class="material-icons">gps_fixed</span>
+              <IconSvg name="gps_fixed" />
               {{ t('settings.sound.scopeClickSound') }}
             </label>
             <div class="setting-controls">
@@ -233,7 +234,7 @@ const previewBurstSound = () => {
                 @click="previewScopeClickSound"
                 :disabled="!scopeClickSound.enabled"
               >
-                <span class="material-icons">play_circle</span>
+                <IconSvg name="play_circle" />
                 {{ t('settings.sound.preview') }}
               </button>
             </div>
@@ -245,7 +246,7 @@ const previewBurstSound = () => {
           <h3>{{ t('settings.sound.burstSound') }}</h3>
           <div class="setting-item">
             <label class="setting-label">
-              <span class="material-icons">bubble_chart</span>
+              <IconSvg name="bubble_chart" />
               {{ t('settings.sound.bubbleBurst') }}
             </label>
             <div class="setting-controls">
@@ -272,7 +273,7 @@ const previewBurstSound = () => {
                 @click="previewBurstSound"
                 :disabled="!soundManager.getBurstSound().enabled"
               >
-                <span class="material-icons">play_circle</span>
+                <IconSvg name="play_circle" />
                 {{ t('settings.sound.preview') }}
               </button>
             </div>
@@ -481,9 +482,10 @@ select:disabled {
   background: var(--accent-dark);
 }
 
-.preview-button .material-icons {
+.preview-button svg {
   font-size: 18px;
   color: var(--accent-color);
+  margin-right: 0.5rem;
 }
 
 /* 音量滑块样式 */

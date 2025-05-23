@@ -21,6 +21,7 @@ import { getVisibleNavigators } from "@/config/navigatorAssets";
 import MessageBox from "@/components/common/MessageBox.vue";
 import Friends from "@/components/Friends/Friends.vue";
 import { useFriendMessages } from "@/composables/useFriendMessages";
+import IconSvg from '@/assets/icons/IconSvg.vue';
 
 
 const router = useRouter();
@@ -160,7 +161,9 @@ watch(
                 <MessageBox ref="messageBoxRef" />
                 <Friends ref="friendsBox" />
                 <button class="logout-btn" @click="logout">
-                  <i class="material-icons">logout</i>
+                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M17 7l-1.41 1.41L18.17 11H8v2h10.17l-2.58 2.58L17 17l5-5zM4 5h8V3H4c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h8v-2H4V5z"/>
+                  </svg>
                 </button>
               </div>
             </div>
@@ -188,7 +191,7 @@ watch(
               class="menu-item"
               :class="{ active: currentRoute === item.path }"
             >
-              <span class="material-icons">{{ item.icon }}</span>
+              <IconSvg :name="item.icon" />
               <span class="menu-text">{{ item.label }}</span>
             </router-link>
           </div>
@@ -293,7 +296,7 @@ nav {
   border-radius: 8px;
   transition: all 0.3s ease;
 
-  .material-icons {
+  svg {
     font-size: 24px;
     color: var(--text-primary);
     transition: color 0.3s ease;
@@ -302,7 +305,7 @@ nav {
   &:hover {
     background: var(--accent-dark);
 
-    .material-icons {
+    svg {
       color: var(--accent-color);
     }
   }
@@ -358,7 +361,7 @@ nav {
   justify-content: center;
   padding: 8px;
 
-  .material-icons {
+  svg {
     font-size: 24px;
   }
 }
@@ -412,13 +415,15 @@ nav {
   }
 }
 
-.menu-item .material-icons {
+.menu-item svg {
+  min-width: 24px;
+  width: 24px;
   margin-right: 1rem;
   font-size: 24px;
   transition: transform 0.3s ease;
 }
 
-.menu-item:hover .material-icons {
+.menu-item:hover svg {
   transform: scale(1.1);
 }
 

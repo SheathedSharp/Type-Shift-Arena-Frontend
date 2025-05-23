@@ -7,7 +7,7 @@
     <!-- 消息盒子触发器 -->
     <div class="message-trigger" @click="toggleExpand">
       <div class="icon-wrapper">
-        <i class="material-icons">mail</i>
+        <IconSvg name="mail" />
         <span class="message-badge" v-if="unreadCount">{{ unreadCount }}</span>
       </div>
     </div>
@@ -43,7 +43,7 @@
         </div>
 
         <div class="empty-state" v-else>
-          <i class="material-icons">inbox</i>
+          <IconSvg name="inbox" />
           <p>暂无消息</p>
         </div>
       </div>
@@ -56,6 +56,7 @@ import { ref, computed, onMounted } from "vue";
 import { getMessages } from "@/api/modules/user/message";
 import { handleFriendRequest } from "@/api/modules/friends/friends";
 import MessageItem from "./MessageItem.vue";
+import IconSvg from '@/assets/icons/IconSvg.vue';
 
 const isExpanded = ref(false);
 const currentTab = ref("all");
@@ -178,7 +179,7 @@ defineExpose({
     justify-content: center;
   }
 
-  .material-icons {
+  svg {
     font-size: 24px;
     color: var(--text-primary);
     transition: color 0.3s ease;
@@ -199,7 +200,7 @@ defineExpose({
   &:hover {
     background: var(--accent-dark);
 
-    .material-icons {
+    svg {
       color: var(--accent-color);
     }
   }
@@ -272,7 +273,7 @@ defineExpose({
   text-align: center;
   color: var(--text-secondary);
 
-  .material-icons {
+  svg {
     font-size: 48px;
     margin-bottom: 8px;
     opacity: 0.5;

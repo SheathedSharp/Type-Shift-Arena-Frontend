@@ -2,7 +2,7 @@
   <div class="friends-box-container">
     <!-- 好友列表触发器 -->
     <div class="friends-trigger" @click="toggleExpand">
-      <i class="material-icons">group</i>
+      <IconSvg name="group" />
       <span class="online-count" v-if="onlineCount">{{ onlineCount }}</span>
     </div>
 
@@ -18,7 +18,7 @@
             <span class="nickname">{{ userInfo.nickname }}</span>
           </div>
           <div class="search-btn" @click="isSearch=!isSearch" title="添加好友">
-            <i class="material-icons">person_add</i>
+            <IconSvg name="person_add" />
           </div>
         </div>
 
@@ -52,10 +52,10 @@
                 :disabled="!friend.online"
                 :title="friend.online ? '邀请游戏' : '好友离线'"
               >
-                <i class="material-icons">sports_esports</i>
+                <IconSvg name="sports_esports" />
               </button>
               <button class="action-btn remove" @click="removeFriendHandler(friend.id)" title="删除好友">
-                <i class="material-icons">person_remove</i>
+                <IconSvg name="person_remove" />
               </button>
             </div>
           </div>
@@ -63,7 +63,7 @@
 
         <!-- 空状态 -->
         <div class="empty-state" v-if="!friendsList.length">
-          <i class="material-icons">group_off</i>
+          <IconSvg name="group_off" />
           <p>暂无好友</p>
         </div>
       </div>
@@ -82,6 +82,7 @@ import Search from "./Search.vue";
 import { getFriends, removeFriend, getOnlineFriends } from "@/api/modules/friends/friends";
 import { ElMessage } from 'element-plus';
 import { useWebSocket } from '@/composables/useWebSocket';
+import IconSvg from '@/assets/icons/IconSvg.vue';
 
 
 const isExpanded = ref(false)
@@ -252,18 +253,8 @@ onMounted(() => {
   border-radius: 8px;
   transition: all 0.3s ease;
   
-  .material-icons {
-    font-size: 24px;
-    color: var(--text-primary);
-    transition: color 0.3s ease;
-  }
-  
   &:hover {
     background: var(--accent-dark);
-    
-    .material-icons {
-      color: var(--accent-color);
-    }
   }
 }
 
@@ -321,9 +312,6 @@ onMounted(() => {
 
     &:hover {
       background: var(--accent-dark);
-      .material-icons {
-        color: var(--accent-color);
-      }
     }
   }
 }
@@ -449,12 +437,6 @@ onMounted(() => {
   align-items: center;
   justify-content: center;
   color: var(--text-secondary);
-  
-  .material-icons {
-    font-size: 48px;
-    margin-bottom: 16px;
-    opacity: 0.5;
-  }
 }
 
 // 滑动动画

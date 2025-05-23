@@ -21,10 +21,10 @@
     <!-- 好友请求的操作按钮 -->
     <div v-if="message.type === 'FRIEND_REQUEST'" class="message-actions">
       <button class="action-btn accept" @click.stop="handleAccept">
-        <i class="material-icons">check</i>
+        <IconSvg name="check" size="18" />
       </button>
       <button class="action-btn reject" @click.stop="handleReject">
-        <i class="material-icons">close</i>
+        <IconSvg name="close" size="18" />
       </button>
     </div>
   </div>
@@ -32,6 +32,7 @@
 
 <script setup>
 import { computed } from "vue";
+import IconSvg from '@/assets/icons/IconSvg.vue';
 
 const emit = defineEmits(['accept', 'reject'])
 
@@ -149,7 +150,7 @@ const formattedDate = computed(() => {
     transition: all 0.3s ease;
     background: transparent;
     
-    i {
+    svg {
       font-size: 18px;
     }
     
