@@ -211,22 +211,22 @@ const handleClick = (event) => {
 
 const editUserInfo = (value) => {
   if (value==='info') {
-    newUserInfo={...userInfo};// 初始化 newUserInfo
-    isEditing=true;
+    Object.assign(newUserInfo, userInfo); // 使用 Object.assign 而不是直接赋值
+    isEditing.value = true; // 使用 .value 修改 ref 的值
   }
   else if(value==='password'){
-    nPassword= {
+    Object.assign(nPassword, {
       oldPassword: '',
       newPassword: '',
       confirmPassword: ''
-    };
-    isEditingP=true;
+    }); // 使用 Object.assign 而不是直接赋值
+    isEditingP.value = true; // 使用 .value 修改 ref 的值
   }
 }
 
 const closeEdit = () => {
-  isEditing=false;
-  isEditingP=false;
+  isEditing.value = false; // 使用 .value 修改 ref 的值
+  isEditingP.value = false; // 使用 .value 修改 ref 的值
 }
 
 const saveUserInfo = async (value) => {
@@ -238,9 +238,9 @@ const saveUserInfo = async (value) => {
       };
       await axios.put(`${API_BASE_URL}/users/${userId}`, updateData);
       
-      userInfo = { ...updateData };
+      Object.assign(userInfo, updateData); // 使用 Object.assign 而不是直接赋值
       alert('更新成功！')
-      isEditing = false;
+      isEditing.value = false; // 使用 .value 修改 ref 的值
     } 
     else if(value==='password'){
       const updatePassword = {
@@ -251,7 +251,7 @@ const saveUserInfo = async (value) => {
       await axios.put(`${API_BASE_URL}/users/${userId}/password`, updatePassword);
       
       alert("更新密码成功！")
-      isEditingP = false;
+      isEditingP.value = false; // 使用 .value 修改 ref 的值
     } 
     window.location.reload(); // 刷新页面
   }
