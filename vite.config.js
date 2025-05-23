@@ -19,6 +19,16 @@ export default defineConfig(({ mode }) => {
     define: {
       global: {},
     },
+    css: {
+      preprocessorOptions: {
+        scss: {
+          // 抑制废弃警告
+          silenceDeprecations: ['legacy-js-api'],
+          // 或者使用现代编译器 API（如果支持）
+          api: 'modern-compiler'
+        }
+      }
+    },
     server: {
       port: 5173,
       proxy: {

@@ -37,8 +37,6 @@
 </template>
 
 <script setup>
-import { defineProps } from 'vue';
-
 defineProps({
   name: {
     type: String,

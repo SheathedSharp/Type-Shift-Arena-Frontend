@@ -54,7 +54,6 @@
 </template>
 
 <script setup>
-import { defineProps, defineEmits } from "vue";
 import { useRouter } from "vue-router";
 import { useWebSocket } from "@/composables/useWebSocket";
 import { useGameState } from "@/composables/useGameState";
@@ -77,10 +76,8 @@ const props = defineProps({
   },
 });
 
-const emit = defineEmits(["close", "accept", "reject"]);
-
 const handleClose = () => {
-  emit("close");
+  // emit("close");
 };
 
 const handleAccept = async () => {
@@ -113,7 +110,7 @@ const handleAccept = async () => {
     await gameState.joinRoom(roomId, playerId, playerName);
 
     // 6. 发出接受邀请的事件
-    emit("accept");
+    // emit("accept");
 
     // 7. 跳转到房间
     router.push(`/room/${roomId}`);
@@ -124,7 +121,7 @@ const handleAccept = async () => {
 };
 
 const handleReject = () => {
-  emit("reject");
+  // emit("reject");
 };
 </script>
 
