@@ -27,6 +27,80 @@ export const fetchDifficultiesByLanguageAndCategory = async (language, category)
 }
 
 /**
+ * 获取所有激活的游戏难度 (新API)
+ * @returns {Promise<GameDifficulty[]>}
+ */
+export const fetchActiveDifficulties = async () => {
+  try {
+    const response = await axios.get('/config/difficulties')
+    return response.data
+  } catch (error) {
+    console.error('Failed to fetch active difficulties:', error)
+    throw error
+  }
+}
+
+/**
+ * 根据名称获取游戏难度
+ * @param {string} name - Difficulty name
+ * @returns {Promise<GameDifficulty>}
+ */
+export const fetchDifficultyByName = async (name) => {
+  try {
+    const response = await axios.get(`/config/difficulties/${name}`)
+    return response.data
+  } catch (error) {
+    console.error('Failed to fetch difficulty by name:', error)
+    throw error
+  }
+}
+
+/**
+ * 创建新的游戏难度
+ * @param {Object} difficultyData - Difficulty data
+ * @returns {Promise<GameDifficulty>}
+ */
+export const createDifficulty = async (difficultyData) => {
+  try {
+    const response = await axios.post('/config/difficulties', difficultyData)
+    return response.data
+  } catch (error) {
+    console.error('Failed to create difficulty:', error)
+    throw error
+  }
+}
+
+/**
+ * 更新游戏难度
+ * @param {number} id - Difficulty ID
+ * @param {Object} difficultyData - Updated difficulty data
+ * @returns {Promise<GameDifficulty>}
+ */
+export const updateDifficulty = async (id, difficultyData) => {
+  try {
+    const response = await axios.put(`/config/difficulties/${id}`, difficultyData)
+    return response.data
+  } catch (error) {
+    console.error('Failed to update difficulty:', error)
+    throw error
+  }
+}
+
+/**
+ * 删除游戏难度
+ * @param {number} id - Difficulty ID
+ * @returns {Promise<void>}
+ */
+export const deleteDifficulty = async (id) => {
+  try {
+    await axios.delete(`/config/difficulties/${id}`)
+  } catch (error) {
+    console.error('Failed to delete difficulty:', error)
+    throw error
+  }
+}
+
+/**
  * Converts API difficulty data to game room options format
  * @param {string[]} difficulties 
  * @returns {Object} Formatted difficulty options

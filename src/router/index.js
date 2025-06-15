@@ -12,6 +12,9 @@
   import GameRoom from '@/views/GameRoom.vue'
   import Personal from '@/views/Personal.vue'
   import TypingPractice from '@/views/TypingPractice.vue'
+  import GameConfigManagement from '@/views/GameConfigManagement.vue'
+import GameConfigRelations from '@/views/GameConfigRelations.vue'
+import GameConfigRelationManagement from '@/views/GameConfigRelationManagement.vue'
 
   const routes = [
     {
@@ -60,6 +63,24 @@
           path: 'macth-make-lobby',
           name: 'matchMakingLobby',
           component: MatchmakingLobby,
+          meta: { requiresAuth: true }
+        },
+        {
+          path: 'game-config',
+          name: 'gameConfig',
+          component: GameConfigManagement,
+          meta: { requiresAuth: true }
+        },
+        {
+          path: 'game-config-relations',
+          name: 'gameConfigRelations',
+          component: GameConfigRelations,
+          meta: { requiresAuth: true }
+        },
+        {
+          path: 'game-config-relation-management',
+          name: 'gameConfigRelationManagement',
+          component: GameConfigRelationManagement,
           meta: { requiresAuth: true }
         },
         // {

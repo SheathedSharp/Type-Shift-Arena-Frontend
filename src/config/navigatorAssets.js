@@ -42,6 +42,24 @@ export const NAVIGATOR_ASSETS = {
     label: '个人练习',
     icon: 'sports_soccer',
     permisson: 'user'
+  },
+  gameConfigManagement: {
+    path: '/game-config',
+    label: '配置管理',
+    icon: 'material-symbols:settings-outline',
+    permission: 'admin'
+  },
+  gameConfigRelations: {
+    path: '/game-config-relations',
+    label: '关系查看',
+    icon: 'material-symbols:account-tree',
+    permission: 'admin'
+  },
+  gameConfigRelationManagement: {
+    path: '/game-config-relation-management',
+    label: '关系管理',
+    icon: 'material-symbols:link',
+    permission: 'admin'
   }
 };
 

@@ -29,6 +29,80 @@ export const fetchCategoriesByLanguage = async (language) => {
 }
 
 /**
+ * 获取所有激活的游戏类型 (新API)
+ * @returns {Promise<GameCategory[]>}
+ */
+export const fetchActiveCategories = async () => {
+  try {
+    const response = await axios.get('/config/categories')
+    return response.data
+  } catch (error) {
+    console.error('Failed to fetch active categories:', error)
+    throw error
+  }
+}
+
+/**
+ * 根据名称获取游戏类型
+ * @param {string} name - Category name
+ * @returns {Promise<GameCategory>}
+ */
+export const fetchCategoryByName = async (name) => {
+  try {
+    const response = await axios.get(`/config/categories/${name}`)
+    return response.data
+  } catch (error) {
+    console.error('Failed to fetch category by name:', error)
+    throw error
+  }
+}
+
+/**
+ * 创建新的游戏类型
+ * @param {Object} categoryData - Category data
+ * @returns {Promise<GameCategory>}
+ */
+export const createCategory = async (categoryData) => {
+  try {
+    const response = await axios.post('/config/categories', categoryData)
+    return response.data
+  } catch (error) {
+    console.error('Failed to create category:', error)
+    throw error
+  }
+}
+
+/**
+ * 更新游戏类型
+ * @param {number} id - Category ID
+ * @param {Object} categoryData - Updated category data
+ * @returns {Promise<GameCategory>}
+ */
+export const updateCategory = async (id, categoryData) => {
+  try {
+    const response = await axios.put(`/config/categories/${id}`, categoryData)
+    return response.data
+  } catch (error) {
+    console.error('Failed to update category:', error)
+    throw error
+  }
+}
+
+/**
+ * 删除游戏类型
+ * @param {number} id - Category ID
+ * @returns {Promise<void>}
+ */
+export const deleteCategory = async (id) => {
+  try {
+    await axios.delete(`/config/categories/${id}`)
+  } catch (error) {
+    console.error('Failed to delete category:', error)
+    throw error
+  }
+}
+
+/**
  * Converts API category data to game room options format
  * @param {GameCategory[]} categories 
  * @returns {Object} Formatted category options

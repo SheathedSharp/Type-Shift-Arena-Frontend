@@ -29,6 +29,95 @@ export const fetchAvailableLanguages = async () => {
 }
 
 /**
+ * 获取所有激活的游戏语言 (新API)
+ * @returns {Promise<GameLanguage[]>}
+ */
+export const fetchActiveLanguages = async () => {
+  try {
+    const response = await axios.get('/config/languages')
+    return response.data
+  } catch (error) {
+    console.error('Failed to fetch active languages:', error)
+    throw error
+  }
+}
+
+/**
+ * 根据名称获取游戏语言
+ * @param {string} name - Language name
+ * @returns {Promise<GameLanguage>}
+ */
+export const fetchLanguageByName = async (name) => {
+  try {
+    const response = await axios.get(`/config/languages/${name}`)
+    return response.data
+  } catch (error) {
+    console.error('Failed to fetch language by name:', error)
+    throw error
+  }
+}
+
+/**
+ * 根据代码获取游戏语言
+ * @param {string} code - Language code
+ * @returns {Promise<GameLanguage>}
+ */
+export const fetchLanguageByCode = async (code) => {
+  try {
+    const response = await axios.get(`/config/languages/code/${code}`)
+    return response.data
+  } catch (error) {
+    console.error('Failed to fetch language by code:', error)
+    throw error
+  }
+}
+
+/**
+ * 创建新的游戏语言
+ * @param {Object} languageData - Language data
+ * @returns {Promise<GameLanguage>}
+ */
+export const createLanguage = async (languageData) => {
+  try {
+    const response = await axios.post('/config/languages', languageData)
+    return response.data
+  } catch (error) {
+    console.error('Failed to create language:', error)
+    throw error
+  }
+}
+
+/**
+ * 更新游戏语言
+ * @param {number} id - Language ID
+ * @param {Object} languageData - Updated language data
+ * @returns {Promise<GameLanguage>}
+ */
+export const updateLanguage = async (id, languageData) => {
+  try {
+    const response = await axios.put(`/config/languages/${id}`, languageData)
+    return response.data
+  } catch (error) {
+    console.error('Failed to update language:', error)
+    throw error
+  }
+}
+
+/**
+ * 删除游戏语言
+ * @param {number} id - Language ID
+ * @returns {Promise<void>}
+ */
+export const deleteLanguage = async (id) => {
+  try {
+    await axios.delete(`/config/languages/${id}`)
+  } catch (error) {
+    console.error('Failed to delete language:', error)
+    throw error
+  }
+}
+
+/**
  * Converts API language data to game room options format
  * @param {GameLanguage[]} languages 
  * @returns {Object} Formatted language options
