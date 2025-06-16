@@ -23,6 +23,10 @@ const signup = ref({
   email: ''
 })
 
+// 防止重复提交的状态
+const isSigningUp = ref(false)
+const isSigningIn = ref(false)
+
 const signUp = () => {
   document.getElementById('container').classList.add("right-panel-active")
   isRightPanelActive.value = true
@@ -34,6 +38,9 @@ const signIn = () => {
 }
 
 const doSignIn = async () => {
+  if (isSigningIn.value) return // 防止重复提交
+  
+  isSigningIn.value = true
   try {
     const response = await fetch(`${API_BASE_URL}/auth/login`, {
       method: 'POST',
@@ -88,10 +95,14 @@ const doSignIn = async () => {
         type: 'error',
         duration: 1500,
     });
+  } finally {
+    isSigningIn.value = false
   }
 }
 
 const doSignUp = async () => {
+  if (isSigningUp.value) return // 防止重复提交
+  
   if (signup.value.password !== signup.value.password_confirm) {
     ElNotification({
         title: '两次输入的密码不一致',
@@ -100,6 +111,8 @@ const doSignUp = async () => {
     });
     return
   }
+  
+  isSigningUp.value = true
   try {
     const response = await fetch(`${API_BASE_URL}/auth/register`, {
       method: 'POST',
@@ -123,7 +136,7 @@ const doSignUp = async () => {
       signin.value.username = signup.value.username
       signin.value.password = signup.value.password
       await doSignIn()
-    }else {
+    } else {
       ElNotification({
         title: '注册失败',
         message: data.message,
@@ -139,6 +152,8 @@ const doSignUp = async () => {
         type: 'error',
         duration: 1500,
     });
+  } finally {
+    isSigningUp.value = false
   }
 }
 </script>
@@ -179,7 +194,9 @@ const doSignUp = async () => {
             <div class="underline"></div>
           </label>
 
-          <button type="submit">注册</button>
+          <button type="submit" :disabled="isSigningUp" :class="{ loading: isSigningUp }">
+            {{ isSigningUp ? '注册中...' : '注册' }}
+          </button>
         </form>
       </div>
 
@@ -203,7 +220,9 @@ const doSignUp = async () => {
           </label>
 
           <a href="#">忘记密码?</a>
-          <button type="submit">登录</button>
+          <button type="submit" :disabled="isSigningIn" :class="{ loading: isSigningIn }">
+            {{ isSigningIn ? '登录中...' : '登录' }}
+          </button>
         </form>
       </div>
 
@@ -369,6 +388,16 @@ button:hover {
 
 button.ghost:hover {
   background-color: rgba(255, 255, 255, 0.1);
+}
+
+button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+button:disabled:hover {
+  background-color: var(--accent-color);
+  border-color: var(--accent-color);
 }
 
 .overlay-container {
