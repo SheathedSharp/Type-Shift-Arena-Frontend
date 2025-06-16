@@ -22,6 +22,7 @@ import MessageBox from "@/components/common/MessageBox.vue";
 import Friends from "@/components/Friends/Friends.vue";
 import { useFriendMessages } from "@/composables/useFriendMessages";
 import IconSvg from '@/assets/icons/IconSvg.vue';
+import { getCurrentUserPermissions } from '@/utils/permissions';
 
 
 const router = useRouter();
@@ -38,7 +39,7 @@ const isSidebarExpanded = ref(false);
 const showSidebar = ref(false); // 控制侧边栏是否显示
 const currentRoute = computed(() => route.path);
 const menuItems = computed(() => {
-  const userPermissions = ["user"];
+  const userPermissions = getCurrentUserPermissions();
   return getVisibleNavigators(userPermissions);
 });
 const { handleFriendMessage } = useFriendMessages();

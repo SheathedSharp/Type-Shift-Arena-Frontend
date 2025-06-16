@@ -35,13 +35,13 @@ export const NAVIGATOR_ASSETS = {
     path: '/macth-make-lobby',
     label: '匹配大厅',
     icon: 'military_tech',
-    permisson: 'user'
+    permission: 'user'
   },
   typingPractice: {
     path: '/typing-practice',
     label: '个人练习',
     icon: 'sports_soccer',
-    permisson: 'user'
+    permission: 'user'
   },
   gameConfigManagement: {
     path: '/game-config',

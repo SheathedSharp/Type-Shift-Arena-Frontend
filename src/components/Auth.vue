@@ -52,6 +52,12 @@ const doSignIn = async () => {
       localStorage.setItem('userName', data.username)
       localStorage.setItem('userId', data.userId)
       localStorage.setItem('imgSrc', data.imgSrc)
+      
+      // 设置用户权限
+      const userRole = data.role || 'user'
+      const { setUserRole } = await import('@/utils/permissions')
+      setUserRole(userRole)
+      
       axios.defaults.headers.common['Authorization'] = `Bearer ${data.token}`
       store.isLoggedIn = true
       
