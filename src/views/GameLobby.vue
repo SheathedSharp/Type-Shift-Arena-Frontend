@@ -12,7 +12,7 @@
               @click.stop="toggleFilterMenu"
               :class="{ 'active': showFilterMenu }"
             >
-              <i class="fas fa-filter"></i>
+              <IconSvg name="filter" />
               <span>{{ activeFiltersCount ? `已选 ${activeFiltersCount}` : '筛选' }}</span>
             </button>
             
@@ -83,7 +83,7 @@
               @click="handleSearch"
               :disabled="isSearching"
             >
-              <i class="fas" :class="isSearching ? 'fa-spinner fa-spin' : 'fa-search'"></i>
+              <IconSvg :name="isSearching ? 'spinner' : 'search'" />
             </button>
             <input 
               type="text" 
@@ -98,7 +98,7 @@
               @click="clearSearch"
               :disabled="isSearching"
             >
-              <i class="fas fa-times"></i>
+              <IconSvg name="times" />
             </button>
           </div>
           <button 
@@ -106,7 +106,7 @@
             :disabled="isRefreshing"
             @click="handleRefresh"
           >
-            <i class="fas fa-sync-alt" :class="{ 'rotating': isRefreshing }"></i>
+            <IconSvg name="sync_alt" :class="{ 'rotating': isRefreshing }" />
           </button>
         </div>
         <div class="room-stats">
@@ -151,7 +151,7 @@
             :disabled="currentPage === 1"
             @click="handlePageChange(currentPage - 1)"
           >
-            <i class="fas fa-chevron-left"></i>
+            <IconSvg name="chevron_left" />
           </button>
           
           <div class="page-numbers">
@@ -171,7 +171,7 @@
             :disabled="currentPage === totalPages"
             @click="handlePageChange(currentPage + 1)"
           >
-            <i class="fas fa-chevron-right"></i>
+            <IconSvg name="chevron_right" />
           </button>
         </div>
       </div>

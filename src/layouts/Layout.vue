@@ -507,15 +507,7 @@ nav {
   -webkit-backdrop-filter: blur(10px);
 }
 
-.menu-item {
-  .material-icons {
-    transition: transform 0.3s ease;
-  }
 
-  &:hover .material-icons {
-    transform: scale(1.1);
-  }
-}
 
 /* 侧边栏过渡动画 */
 .sidebar-enter-active,

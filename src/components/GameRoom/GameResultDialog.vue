@@ -59,7 +59,7 @@
         <div class="score-change" :class="{ 'positive': scoreChange > 0, 'negative': scoreChange < 0 }">
           <span class="old-score">{{ oldScore }}</span>
           <span class="change-arrow">
-            <i class="fas" :class="scoreChange > 0 ? 'fa-arrow-up' : 'fa-arrow-down'"></i>
+            <IconSvg :name="scoreChange > 0 ? 'arrow_up' : 'arrow_down'" />
             {{ Math.abs(scoreChange) }}
           </span>
           <span class="new-score">{{ oldScore + scoreChange }}</span>
@@ -69,15 +69,15 @@
       <!-- Match details -->
       <div class="match-details">
         <div class="detail-item">
-          <i class="fas fa-language"></i>
+          <IconSvg name="language" />
           <span>{{ match.language }}</span>
         </div>
         <div class="detail-item">
-          <i class="fas fa-gamepad"></i>
+          <IconSvg name="gamepad" />
           <span>{{ match.category }}</span>
         </div>
         <div class="detail-item">
-          <i class="fas fa-signal"></i>
+          <IconSvg name="signal" />
           <span>{{ match.difficulty }}</span>
         </div>
       </div>
@@ -85,11 +85,11 @@
       <!-- Action buttons -->
       <div class="action-buttons">
         <button class="btn rematch-btn" @click="handleRematch">
-          <i class="fas fa-redo"></i>
+          <IconSvg name="redo" />
           重新比赛
         </button>
         <button class="btn leave-btn" @click="handleLeaveRoom">
-          <i class="fas fa-door-open"></i>
+          <IconSvg name="door_open" />
           离开房间
         </button>
       </div>
@@ -100,6 +100,7 @@
 <script setup>
 import { computed } from 'vue'
 import { useRouter } from 'vue-router'
+import IconSvg from '@/assets/icons/IconSvg.vue'
 
 const router = useRouter()
 

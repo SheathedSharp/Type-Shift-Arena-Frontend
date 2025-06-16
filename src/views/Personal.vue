@@ -806,11 +806,7 @@ body {
   transform: translateY(-2px);
 }
 
-/* 图标样式 */
-.material-icons {
-  font-size: 1.2rem;
-  color: var(--accent-color);
-}
+
 
 /* GIF 区域样式 */
 .gif {

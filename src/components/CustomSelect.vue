@@ -1,5 +1,6 @@
 <script setup>
 import { ref, watch, computed, onMounted, onBeforeUnmount } from 'vue'
+import IconSvg from '@/assets/icons/IconSvg.vue'
 
 const props = defineProps({
   modelValue: {
@@ -87,17 +88,13 @@ onBeforeUnmount(() => {
       @click="toggleDropdown"
     >
       <div class="selected-option" v-if="selectedOption">
-        <span class="material-icons" v-if="selectedOption.icon">
-          {{ selectedOption.icon }}
-        </span>
+        <IconSvg v-if="selectedOption.icon" :name="selectedOption.icon" />
         <span class="option-label">{{ selectedOption.label }}</span>
       </div>
       <div class="placeholder" v-else>
         {{ placeholder }}
       </div>
-      <span class="material-icons arrow" :class="{ 'is-open': isOpen }">
-        expand_more
-      </span>
+      <IconSvg name="expand_more" class="arrow" :class="{ 'is-open': isOpen }" />
     </div>
 
     <transition name="dropdown">
@@ -109,9 +106,7 @@ onBeforeUnmount(() => {
             :class="{ 'is-selected': option.value === modelValue }"
             @click="selectOption(option)"
         >
-            <span class="material-icons" v-if="option.icon">
-            {{ option.icon }}
-            </span>
+            <IconSvg v-if="option.icon" :name="option.icon" />
             <span class="option-label">{{ option.label }}</span>
         </div>
         </div>
@@ -200,9 +195,7 @@ onBeforeUnmount(() => {
   color: white;
 }
 
-.option-item .material-icons {
-  font-size: 20px;
-}
+
 
 /* 禁用状态 */
 .is-disabled {

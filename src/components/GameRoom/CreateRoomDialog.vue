@@ -4,7 +4,7 @@
       <div class="dialog-header">
         <h2>创建房间</h2>
         <button class="close-btn" @click="closeDialog">
-          <i class="fas fa-times"></i>
+          <IconSvg name="times" />
         </button>
       </div>
 
@@ -146,7 +146,7 @@ import { ElNotification } from 'element-plus'
 import axios from '@/plugins/axios'
 import { useWebSocket } from '@/composables/useWebSocket'
 import { useGameState } from '@/composables/useGameState'
-import { Icon } from '@iconify/vue'
+import IconSvg from '@/assets/icons/IconSvg.vue'
 
 const router = useRouter()
 const props = defineProps({

@@ -2,7 +2,7 @@
   <div class="status-bar">
     <div class="status-item">
       <div class="status-icon">
-        <i class="fas fa-heart"></i>
+        <IconSvg name="heart" />
       </div>
       <div class="health-system">
         <div class="health-bar">
@@ -29,7 +29,7 @@
 
     <div class="status-item">
       <div class="status-icon">
-        <i class="fas fa-star"></i>
+        <IconSvg name="star" />
       </div>
       <div class="score-display">
         <span class="score-number" :class="{ 'score-up': scoreAnimating }">
@@ -42,6 +42,8 @@
 </template>
 
 <script setup>
+import IconSvg from '@/assets/icons/IconSvg.vue'
+
 defineProps({
   maxHealth: {
     type: Number,
@@ -100,9 +102,7 @@ defineProps({
   color: #4f8cff;
 }
 
-.status-icon i {
-  font-size: 1.2rem;
-}
+
 
 .health-system {
   display: flex;

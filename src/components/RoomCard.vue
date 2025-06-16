@@ -23,7 +23,7 @@
       </div>
       <div class="player-info empty" v-else>
         <div class="waiting-avatar">
-          <i class="fas fa-user-plus"></i>
+          <IconSvg name="user_plus" />
         </div>
         <span>等待玩家加入...</span>
       </div>
@@ -47,7 +47,7 @@
       <!-- 等待玩家加入提示 -->
       <div class="waiting-player" v-else>
         <div class="waiting-avatar">
-          <i class="fas fa-user-plus"></i>
+          <IconSvg name="user_plus" />
         </div>
         <span>等待加入...</span>
       </div>
@@ -56,19 +56,19 @@
     <!-- 房间信息 -->
     <div class="room-info">
       <div class="info-item">
-        <i class="fas fa-users"></i>
+        <IconSvg name="users" />
         <span>{{ room.playersCount }}/2</span>
       </div>
       <div class="info-item">
-        <i class="fas fa-language"></i>
+        <IconSvg name="language" />
         <span>{{ getLanguageLabel(room.language) }}</span>
       </div>
       <div class="info-item">
-        <i class="fas fa-gamepad"></i>
+        <IconSvg name="gamepad" />
         <span>{{ getCategoryLabel(room.category) }}</span>
       </div>
       <div class="info-item">
-        <i class="fas fa-signal"></i>
+        <IconSvg name="signal" />
         <span>{{ getDifficultyLabel(room.difficulty) }}</span>
       </div>
     </div>
@@ -88,6 +88,7 @@
 
 <script setup>
 import { getLanguageLabel, getCategoryLabel, getDifficultyLabel } from '@/utils/labelUtils'
+import IconSvg from '@/assets/icons/IconSvg.vue'
 
 defineProps({
   room: {
