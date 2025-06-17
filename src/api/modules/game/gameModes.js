@@ -32,6 +32,20 @@ export const fetchActiveModes = async () => {
 }
 
 /**
+ * 获取所有游戏模式（包括禁用的）
+ * @returns {Promise<GameMode[]>}
+ */
+export const fetchAllModes = async () => {
+  try {
+    const response = await axios.get('/config/modes?includeInactive=true')
+    return response.data
+  } catch (error) {
+    console.error('Failed to fetch all modes:', error)
+    throw error
+  }
+}
+
+/**
  * 根据名称获取游戏模式
  * @param {string} name - Mode name
  * @returns {Promise<GameMode>}

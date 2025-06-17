@@ -43,6 +43,20 @@ export const fetchActiveCategories = async () => {
 }
 
 /**
+ * 获取所有游戏类型（包括禁用的）
+ * @returns {Promise<GameCategory[]>}
+ */
+export const fetchAllCategories = async () => {
+  try {
+    const response = await axios.get('/config/categories?includeInactive=true')
+    return response.data
+  } catch (error) {
+    console.error('Failed to fetch all categories:', error)
+    throw error
+  }
+}
+
+/**
  * 根据名称获取游戏类型
  * @param {string} name - Category name
  * @returns {Promise<GameCategory>}

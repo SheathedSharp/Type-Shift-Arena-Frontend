@@ -3,25 +3,29 @@ import { ref, onMounted, computed } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { 
-  fetchActiveModes, 
+  fetchActiveModes,
+  fetchAllModes, 
   createMode, 
   updateMode, 
   deleteMode 
 } from '@/api/modules/game/gameModes'
 import { 
   fetchActiveLanguages,
+  fetchAllLanguages,
   createLanguage,
   updateLanguage,
   deleteLanguage
 } from '@/api/modules/game/gameLanguages'
 import {
   fetchActiveCategories,
+  fetchAllCategories,
   createCategory,
   updateCategory,
   deleteCategory
 } from '@/api/modules/game/gameCategories'
 import {
   fetchActiveDifficulties,
+  fetchAllDifficulties,
   createDifficulty,
   updateDifficulty,
   deleteDifficulty
@@ -145,12 +149,12 @@ const fetchData = async () => {
   loading.value = true
   try {
     const [modes, languages, categories, difficulties] = await Promise.all([
-      fetchActiveModes(),
-      fetchActiveLanguages(),
-      fetchActiveCategories(),
-      fetchActiveDifficulties()
+      fetchAllModes(), // 获取所有模式（包括禁用的）
+      fetchAllLanguages(), // 获取所有语言（包括禁用的）
+      fetchAllCategories(), // 获取所有类型（包括禁用的）
+      fetchAllDifficulties() // 获取所有难度（包括禁用的）
     ])
-    
+    console.log('modes', modes)
     modesData.value = modes
     languagesData.value = languages
     categoriesData.value = categories

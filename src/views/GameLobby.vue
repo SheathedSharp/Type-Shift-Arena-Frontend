@@ -213,6 +213,8 @@ import { fetchDifficultiesByLanguageAndCategory, convertToGameOptions as convert
 import { useWebSocket } from '@/composables/useWebSocket'
 import { useGameState } from '@/composables/useGameState'
 import IconSvg from '@/assets/icons/IconSvg.vue';
+
+
 const router = useRouter()
 const rooms = ref([])
 const totalRooms = ref(0)

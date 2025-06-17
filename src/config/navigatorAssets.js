@@ -13,6 +13,12 @@
  */
 
 export const NAVIGATOR_ASSETS = {
+  quickStart: {
+    path: '/quick-start',
+    label: '快速开始',
+    icon: 'star',
+    permission: 'user'
+  },
   gamelobby: {
     path: '/game-lobby',
     label: '游戏大厅',
@@ -60,7 +66,7 @@ export const NAVIGATOR_ASSETS = {
     label: '关系管理',
     icon: 'material-symbols:link',
     permission: 'admin'
-  }
+  },
 };
 
 /**

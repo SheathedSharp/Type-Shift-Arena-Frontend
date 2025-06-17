@@ -41,6 +41,20 @@ export const fetchActiveDifficulties = async () => {
 }
 
 /**
+ * 获取所有游戏难度（包括禁用的）
+ * @returns {Promise<GameDifficulty[]>}
+ */
+export const fetchAllDifficulties = async () => {
+  try {
+    const response = await axios.get('/config/difficulties?includeInactive=true')
+    return response.data
+  } catch (error) {
+    console.error('Failed to fetch all difficulties:', error)
+    throw error
+  }
+}
+
+/**
  * 根据名称获取游戏难度
  * @param {string} name - Difficulty name
  * @returns {Promise<GameDifficulty>}

@@ -43,6 +43,20 @@ export const fetchActiveLanguages = async () => {
 }
 
 /**
+ * 获取所有游戏语言（包括禁用的）
+ * @returns {Promise<GameLanguage[]>}
+ */
+export const fetchAllLanguages = async () => {
+  try {
+    const response = await axios.get('/config/languages?includeInactive=true')
+    return response.data
+  } catch (error) {
+    console.error('Failed to fetch all languages:', error)
+    throw error
+  }
+}
+
+/**
  * 根据名称获取游戏语言
  * @param {string} name - Language name
  * @returns {Promise<GameLanguage>}
